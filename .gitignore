@@ -1,2 +1,6 @@
 guia_personal.ipynb
 untitled
+*.ipynb
+.ipynb_checkpoints/
+__pycache__/
+.env
