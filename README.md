@@ -1,49 +1,47 @@
-# Inteligencia-Artificial-TP-2026
+# TP de Inteligencia Artificial 2026 — SQAC
+Integrantes: Junior Jordan Flores Ramos, Marcial Alejandro Insaurralde, Luis Uriel Espindola.
+Notebook principal: `natebook.ipynb`.
 
-# Stack tecnológico:
-• Python 3.10+ 
-• PyTorch 2.x o TensorFlow/Keras 2.x (A decidir). 
-• scikit-learn para baseline y métricas. 
-• matplotlib / seaborn para visualizaciones. 
-• HuggingFace datasets para carga de AG News y SQuAD. -> A investigar.
+El proyecto reformula SQAC como una tarea de **clasificación binaria de pares pregunta–oración**: dado una pregunta y una oración candidata del contexto, el modelo predice si esa oración contiene la respuesta según la etiqueta construida a partir de `answer_start`.
 
-# Entorno de trabajo:
+## Contenido del notebook
 
-• Google Colab
+El archivo integra estas etapas:
 
-## Consejos para el éxito 
+- **Etapa 1:** análisis exploratorio, particiones oficiales, generación de pares pregunta–oración y baseline TF-IDF con regresión logística.
+- **Etapa 2:** análisis de errores, reducción de negativos en Train y experimentos con MLP sobre características TF-IDF.
+- **Etapa 3:** clasificadores Naive Bayes como referencia y modelos neuronales sobre embeddings, incluidos embeddings preentrenados en español y arquitecturas pareadas.
+- **Etapa 5:** comparación y selección del modelo, verificación en Dev, evaluación final en Test, inspección cualitativa y análisis ético/de sesgos.
 
-• Commitear el notebook en GitHub o Google Drive con frecuencia para no perder 
-avances. 
-• Documentar los experimentos fallidos: son tan informativos como los exitosos y 
-suman en la evaluación. 
+La versión actual no contiene una sección de Etapa 4.
 
+## Dataset y entorno
 
-# Formato y modalidad de entrega 
+- **Dataset:** `PlanTL-GOB-ES/sqac`, cargado desde Hugging Face Datasets mediante `load_dataset`. Se utilizan las particiones oficiales Train, Validation/Dev y Test.
+- **Entorno recomendado:** Google Colab. El notebook usa `google.colab.drive` para montar Google Drive y contiene funciones de descarga de archivos de Colab.
+- **Framework:** TensorFlow/Keras. No usa PyTorch.
+- **Otras librerías:** NumPy, pandas, scikit-learn, Matplotlib, Seaborn, Hugging Face Datasets y spaCy.
+- **Dependencia fijada explícitamente:** spaCy `3.8.16`; el notebook instala el modelo de idioma `es_core_news_md`.
 
-## Nombre del archivo 
+## Preparación y ejecución
 
-El notebook debe nombrarse con el siguiente formato: 
-TP_IA2026_APELLIDO1_ APELLIDO2_ APELLIDO3_Numerodegrupo.ipynb 
-Ejemplo: TP_IA2026_GONZALEZ_MARTINEZ_LOPEZ_GRUPO1.ipynb 
+1. Abrir `natebook.ipynb` en Google Colab y conectar Google Drive cuando lo solicite el notebook.
+2. Ejecutar las celdas desde el inicio y en orden. La carga del dataset se realiza desde Hugging Face; no requiere descargar SQAC manualmente.
+3. La celda inicial instala spaCy y descarga `es_core_news_md`. Se requiere acceso a Internet para esas descargas.
+4. Ejecutar las etapas de desarrollo antes de la Etapa 5: varias celdas reutilizan datos, vectorizadores, modelos e historias generados anteriormente.
+5. Antes de ejecutar la carga del modelo seleccionado en la Etapa 5, verificar que el archivo de pesos esté disponible en Google Drive en esta ruta exacta:
 
-## Estructura de carpetas a entregar 
+   `/content/drive/MyDrive/IA- TP/modelo_1_pesos.weights.h5`
 
-Comprimir en un único archivo .zip con la siguiente estructura: 
-• TP_IA2026_APELLIDO_NombreDataset/ 
-◦ notebook.ipynb — el notebook principal 
-◦ requirements.txt — librerías necesarias y versiones 
-◦ README.md — instrucciones para reproducir el entorno y ejecutar el notebook 
-◦ resultados/ — carpeta con imágenes exportadas de los gráficos más importantes 
+   Enlace de Drive informado para el archivo: [Pesos del Modelo 1 de la Etapa 3](https://drive.google.com/file/d/1cRZTUdRPfmFwEo7AwH5YNgokuD7fl8T0/view?usp=drivesdk). Asegurarse de que la cuenta de Colab tenga acceso y que el archivo esté disponible con el nombre y la ruta indicados arriba.
 
->[!Note]
-> 'resultados/' (opcional pero recomendado) 
+   La celda de la Etapa 5 carga ese archivo con `modelo_pareado.load_weights(...)`; no lo crea. El archivo de pesos no está incluido en este repositorio, por lo que debe guardarse previamente en esa ubicación.
+6. La Etapa 5 prepara y evalúa Test con el Modelo 1 pareado seleccionado, usando el umbral 0,50. Test está reservado para la evaluación final: realizarla una sola vez y no usar sus resultados para volver a elegir o ajustar el modelo.
 
+El notebook contiene varios entrenamientos y su ejecución completa puede llevar tiempo. Si se inicia una sesión nueva de Colab, hay que volver a ejecutar las celdas necesarias en orden para reconstruir las variables y modelos.
 
-## Canal de entrega 
-Universidad Nacional Guillermo Brown — Inteligencia Artificial 2026 
-Docente: Pablo Moreira  —  Agosto 2026 
-La entrega se realiza a través del campus virtual de la Universidad. Se habilitará una tarea 
-por cada etapa con la fecha límite indicada en la tabla de evaluación. 
-La entrega final de la Etapa 5 debe incluir el notebook completo con todas las etapas 
-integradas. Se realiza una sola entrega por grupo de parte de uno de los integrantes 
+## Archivos y resultados
+
+- `natebook.ipynb`: notebook con el desarrollo y las celdas de análisis.
+- La inspección de errores de la Etapa 2 puede exportar un CSV y ofrecer su descarga desde Colab.
+- Los gráficos se muestran en las salidas de las celdas; el notebook no exporta automáticamente todos los gráficos como archivos independientes.
